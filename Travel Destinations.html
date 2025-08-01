@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wonder - Find Your Next Adventure</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2A9D8F',
+                        secondary: '#264653'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'lato': ['Lato', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+        
+        .hero-bg {
+            background-image: url('https://readdy.ai/api/search-image?query=stunning%20mountain%20landscape%20at%20golden%20hour%20with%20pristine%20lake%20reflection%2C%20dramatic%20peaks%2C%20ethereal%20mist%2C%20cinematic%20lighting%2C%20travel%20photography%2C%20inspirational%20adventure%20scene%2C%20wide%20panoramic%20view%2C%20natural%20beauty%2C%20serene%20wilderness%2C%20professional%20landscape%20photography&width=1920&height=1080&seq=hero001&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+        }
+        
+        .destination-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .destination-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .modal {
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .search-input {
+            background-color: #2d2d2d;
+            border: 1px solid #404040;
+            color: #f0f0f0;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2A9D8F;
+            box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: #888;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Hero Section -->
+    <section class="hero-bg relative h-screen flex items-center justify-center">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-6">
+            <h1 class="font-montserrat font-bold text-5xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
+                Find Your Next Adventure
+            </h1>
+            <p class="font-lato text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+                Discover breathtaking destinations around the world and create memories that will last a lifetime
+            </p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="py-16 bg-gray-800">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="relative max-w-md mx-auto">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-search-line text-gray-400"></i>
+                    </div>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    class="search-input w-full pl-12 pr-4 py-4 rounded-lg text-base font-lato"
+                    placeholder="Search destinations..."
+                >
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Grid -->
+    <section class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-montserrat font-bold text-4xl text-center mb-16 text-white">
+                Popular Destinations
+            </h2>
+            <div id="destinationGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Destination cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-12 border-t border-gray-700">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center">
+                <p class="font-lato text-gray-400 mb-6">
+                    &copy; 2025 TimelineStudios. All rights reserved.
+                </p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-facebook-fill text-xl"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-twitter-fill text-xl"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors duration-300">
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-instagram-fill text-xl"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0 bg-black bg-opacity-70" id="modalBackdrop"></div>
+        <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="modal bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+                <div class="relative h-80">
+                    <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
+                    <button id="closeModal" class="absolute top-4 right-4 w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-all duration-300">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-close-line text-xl"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="p-8">
+                    <h3 id="modalTitle" class="font-montserrat font-bold text-3xl text-white mb-4"></h3>
+                    <p id="modalDescription" class="font-lato text-gray-300 text-lg leading-relaxed mb-8"></p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-montserrat font-semibold text-xl text-white mb-4 flex items-center">
+                                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                    <i class="ri-map-pin-line text-primary"></i>
+                                </div>
+                                Top 3 Attractions
+                            </h4>
+                            <ul id="modalAttractions" class="space-y-3">
+                                <!-- Attractions will be populated by JavaScript -->
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-montserrat font-semibold text-xl text-white mb-4 flex items-center">
+                                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                    <i class="ri-calendar-line text-primary"></i>
+                                </div>
+                                Best Time to Visit
+                            </h4>
+                            <p id="modalBestTime" class="font-lato text-gray-300 text-base leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="destinationData">
+        const destinations = [
+            {
+                id: 1,
+                name: "Santorini, Greece",
+                tagline: "Whitewashed beauty meets azure seas",
+                image: "https://readdy.ai/api/search-image?query=stunning%20Santorini%20Greece%20whitewashed%20buildings%20with%20blue%20domes%20overlooking%20azure%20Aegean%20sea%2C%20iconic%20Greek%20island%20architecture%2C%20dramatic%20cliffs%2C%20sunset%20golden%20hour%20lighting%2C%20Mediterranean%20paradise%2C%20travel%20photography%2C%20pristine%20white%20and%20blue%20color%20scheme&width=400&height=300&seq=santorini001&orientation=landscape",
+                description: "Perched on volcanic cliffs overlooking the Aegean Sea, Santorini captivates visitors with its iconic blue-domed churches, whitewashed buildings, and spectacular sunsets. This Greek island paradise offers a perfect blend of ancient history, stunning architecture, and romantic ambiance.",
+                attractions: ["Oia Village Sunset", "Red Beach", "Ancient Akrotiri"],
+                bestTime: "April to October offers the best weather with warm temperatures and minimal rainfall. July and August are peak season with vibrant nightlife, while shoulder seasons provide fewer crowds and pleasant conditions."
+            },
+            {
+                id: 2,
+                name: "Kyoto, Japan",
+                tagline: "Ancient temples meet modern elegance",
+                image: "https://readdy.ai/api/search-image?query=beautiful%20Kyoto%20Japan%20traditional%20temple%20with%20cherry%20blossoms%2C%20ancient%20pagoda%20architecture%2C%20serene%20zen%20garden%2C%20spring%20sakura%20petals%2C%20traditional%20Japanese%20aesthetics%2C%20peaceful%20temple%20grounds%2C%20cultural%20heritage%20site%2C%20soft%20natural%20lighting&width=400&height=300&seq=kyoto001&orientation=landscape",
+                description: "Japan's former imperial capital seamlessly blends ancient traditions with modern sophistication. Home to over 2,000 temples and shrines, Kyoto offers visitors an authentic glimpse into Japanese culture through its preserved historic districts, traditional tea ceremonies, and exquisite gardens.",
+                attractions: ["Fushimi Inari Shrine", "Bamboo Grove", "Kinkaku-ji Temple"],
+                bestTime: "Spring (March-May) for cherry blossoms and autumn (September-November) for fall foliage are ideal. These seasons offer comfortable temperatures and stunning natural beauty, though expect larger crowds during peak bloom periods."
+            },
+            {
+                id: 3,
+                name: "Machu Picchu, Peru",
+                tagline: "Lost city in the clouds",
+                image: "https://readdy.ai/api/search-image?query=majestic%20Machu%20Picchu%20Peru%20ancient%20Incan%20ruins%20perched%20on%20mountain%20ridge%2C%20dramatic%20Andean%20peaks%2C%20mystical%20cloud%20forest%2C%20archaeological%20wonder%2C%20stone%20terraces%20and%20structures%2C%20morning%20mist%2C%20UNESCO%20world%20heritage%20site%2C%20breathtaking%20mountain%20landscape&width=400&height=300&seq=machupicchu001&orientation=landscape",
+                description: "This ancient Incan citadel, mysteriously abandoned in the 16th century, stands as one of the world's most remarkable archaeological sites. Perched high in the Andes Mountains, Machu Picchu offers visitors an unforgettable journey through history and breathtaking mountain scenery.",
+                attractions: ["Huayna Picchu Hike", "Temple of the Sun", "Inca Trail"],
+                bestTime: "May to September is the dry season with clear skies and excellent hiking conditions. June to August offers the best weather but also the largest crowds. Consider visiting during shoulder months for a balance of good weather and fewer tourists."
+            },
+            {
+                id: 4,
+                name: "Bali, Indonesia",
+                tagline: "Tropical paradise of culture and nature",
+                image: "https://readdy.ai/api/search-image?query=stunning%20Bali%20Indonesia%20tropical%20paradise%20with%20emerald%20rice%20terraces%2C%20traditional%20Hindu%20temple%2C%20lush%20jungle%20landscape%2C%20peaceful%20water%20features%2C%20Indonesian%20cultural%20architecture%2C%20golden%20sunset%20lighting%2C%20serene%20natural%20beauty%2C%20Southeast%20Asian%20paradise&width=400&height=300&seq=bali001&orientation=landscape",
+                description: "Known as the Island of the Gods, Bali enchants visitors with its lush landscapes, ancient temples, and vibrant culture. From emerald rice terraces to pristine beaches, this Indonesian paradise offers diverse experiences for every type of traveler seeking both adventure and relaxation.",
+                attractions: ["Tegallalang Rice Terraces", "Uluwatu Temple", "Sacred Monkey Forest"],
+                bestTime: "April to October is the dry season with sunny days and low humidity. July and August are peak tourist months with vibrant festivals. The wet season (November-March) brings afternoon showers but also lush green landscapes and fewer crowds."
+            },
+            {
+                id: 5,
+                name: "Iceland Ring Road",
+                tagline: "Land of fire and ice adventures",
+                image: "https://readdy.ai/api/search-image?query=dramatic%20Iceland%20landscape%20with%20powerful%20waterfall%20cascading%20over%20volcanic%20cliffs%2C%20rugged%20Nordic%20terrain%2C%20pristine%20wilderness%2C%20dramatic%20sky%20with%20aurora%20potential%2C%20raw%20natural%20beauty%2C%20adventure%20travel%20destination%2C%20pristine%20untouched%20nature%2C%20cinematic%20landscape%20photography&width=400&height=300&seq=iceland001&orientation=landscape",
+                description: "Iceland's Ring Road offers one of the world's most spectacular road trips, showcasing the island's diverse natural wonders. From thundering waterfalls and geothermal hot springs to glacial lagoons and volcanic landscapes, this Nordic island provides unparalleled natural beauty.",
+                attractions: ["Blue Lagoon", "Gullfoss Waterfall", "Northern Lights"],
+                bestTime: "June to August offers the warmest weather and midnight sun, perfect for road trips. September to March provides the best chance to see Northern Lights, though weather can be unpredictable. Each season offers unique experiences and natural phenomena."
+            },
+            {
+                id: 6,
+                name: "Marrakech, Morocco",
+                tagline: "Imperial city of exotic markets and palaces",
+                image: "https://readdy.ai/api/search-image?query=vibrant%20Marrakech%20Morocco%20medina%20with%20traditional%20Islamic%20architecture%2C%20ornate%20palace%20courtyard%2C%20intricate%20geometric%20patterns%2C%20warm%20terracotta%20and%20gold%20colors%2C%20bustling%20marketplace%20atmosphere%2C%20Moroccan%20cultural%20heritage%2C%20exotic%20North%20African%20destination%2C%20architectural%20details&width=400&height=300&seq=marrakech001&orientation=landscape",
+                description: "This imperial city captivates visitors with its labyrinthine medina, vibrant souks, and stunning Islamic architecture. Marrakech offers an intoxicating blend of ancient traditions and modern luxury, where aromatic spices, colorful textiles, and ornate palaces create an unforgettable sensory experience.",
+                attractions: ["Jemaa el-Fnaa Square", "Bahia Palace", "Atlas Mountains"],
+                bestTime: "October to April offers pleasant temperatures perfect for exploring the city and nearby mountains. Summer months can be extremely hot, making outdoor activities challenging. Spring and autumn provide ideal conditions for both city exploration and desert excursions."
+            },
+            {
+                id: 7,
+                name: "Norwegian Fjords",
+                tagline: "Dramatic landscapes carved by glaciers",
+                image: "https://readdy.ai/api/search-image?query=breathtaking%20Norwegian%20fjord%20with%20steep%20mountain%20cliffs%20rising%20from%20deep%20blue%20water%2C%20dramatic%20Nordic%20landscape%2C%20pristine%20wilderness%2C%20waterfalls%20cascading%20down%20rock%20faces%2C%20serene%20natural%20beauty%2C%20Scandinavian%20adventure%20destination%2C%20majestic%20scale%2C%20cinematic%20lighting&width=400&height=300&seq=norway001&orientation=landscape",
+                description: "Norway's fjords represent some of Earth's most dramatic landscapes, carved by glaciers over millions of years. These deep blue waterways, surrounded by towering cliffs and cascading waterfalls, offer visitors unparalleled natural beauty and outdoor adventure opportunities.",
+                attractions: ["Geirangerfjord", "Preikestolen Rock", "Midnight Sun"],
+                bestTime: "May to September offers the warmest weather and longest days, with the midnight sun phenomenon in summer. June to August provides the best conditions for hiking and outdoor activities, while winter offers Northern Lights viewing opportunities."
+            },
+            {
+                id: 8,
+                name: "Cape Town, South Africa",
+                tagline: "Where two oceans meet urban sophistication",
+                image: "https://readdy.ai/api/search-image?query=stunning%20Cape%20Town%20South%20Africa%20with%20Table%20Mountain%20backdrop%2C%20vibrant%20city%20skyline%2C%20pristine%20beaches%2C%20dramatic%20mountain%20landscape%2C%20urban%20sophistication%20meets%20natural%20beauty%2C%20African%20sunset%20lighting%2C%20cosmopolitan%20destination%2C%20scenic%20coastal%20views&width=400&height=300&seq=capetown001&orientation=landscape",
+                description: "Nestled between Table Mountain and two oceans, Cape Town combines natural beauty with urban sophistication. This cosmopolitan city offers world-class wines, pristine beaches, rich history, and diverse cultural experiences, making it one of Africa's most captivating destinations.",
+                attractions: ["Table Mountain", "Robben Island", "Cape Winelands"],
+                bestTime: "October to April is summer with warm, dry weather perfect for beaches and outdoor activities. December to February offers the warmest temperatures but also peak tourist season. Autumn and spring provide pleasant weather with fewer crowds."
+            }
+        ];
+    </script>
+
+    <script id="searchFunctionality">
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const destinationGrid = document.getElementById('destinationGrid');
+            
+            function renderDestinations(destinationsToShow) {
+                destinationGrid.innerHTML = '';
+                destinationsToShow.forEach(destination => {
+                    const card = document.createElement('div');
+                    card.className = 'destination-card bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer border border-gray-700';
+                    card.innerHTML = `
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${destination.image}" alt="${destination.name}" class="w-full h-full object-cover object-top">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-montserrat font-bold text-xl text-white mb-2">${destination.name}</h3>
+                            <p class="font-lato text-gray-400 text-sm">${destination.tagline}</p>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => openModal(destination));
+                    destinationGrid.appendChild(card);
+                });
+            }
+            
+            function filterDestinations() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const filteredDestinations = destinations.filter(destination =>
+                    destination.name.toLowerCase().includes(searchTerm) ||
+                    destination.tagline.toLowerCase().includes(searchTerm)
+                );
+                renderDestinations(filteredDestinations);
+            }
+            
+            searchInput.addEventListener('input', filterDestinations);
+            
+            renderDestinations(destinations);
+        });
+    </script>
+
+    <script id="modalFunctionality">
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modal');
+            const modalBackdrop = document.getElementById('modalBackdrop');
+            const closeModal = document.getElementById('closeModal');
+            const modalContent = modal.querySelector('.modal');
+            
+            function openModal(destination) {
+                document.getElementById('modalImage').src = destination.image;
+                document.getElementById('modalTitle').textContent = destination.name;
+                document.getElementById('modalDescription').textContent = destination.description;
+                document.getElementById('modalBestTime').textContent = destination.bestTime;
+                
+                const attractionsList = document.getElementById('modalAttractions');
+                attractionsList.innerHTML = '';
+                destination.attractions.forEach(attraction => {
+                    const li = document.createElement('li');
+                    li.className = 'font-lato text-gray-300 flex items-center';
+                    li.innerHTML = `
+                        <div class="w-4 h-4 flex items-center justify-center mr-3">
+                            <i class="ri-star-fill text-primary text-sm"></i>
+                        </div>
+                        ${attraction}
+                    `;
+                    attractionsList.appendChild(li);
+                });
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    modalContent.classList.add('active');
+                }, 10);
+            }
+            
+            function closeModalFunction() {
+                modalContent.classList.remove('active');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+            
+            closeModal.addEventListener('click', closeModalFunction);
+            modalBackdrop.addEventListener('click', closeModalFunction);
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModalFunction();
+                }
+            });
+            
+            window.openModal = openModal;
+        });
+    </script>
+</body>
+</html>
